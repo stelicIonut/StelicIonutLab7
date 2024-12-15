@@ -17,6 +17,7 @@ namespace StelicIonutLab7.Data
             _database.CreateTableAsync<ShopList>().Wait();
             _database.CreateTableAsync<Product>().Wait();
             _database.CreateTableAsync<ListProduct>().Wait();
+            _database.CreateTableAsync<Shop>().Wait();
         }
 
         public Task<int> SaveProductAsync(Product product)
@@ -104,6 +105,27 @@ namespace StelicIonutLab7.Data
             return _database.Table<ListProduct>()
                 .Where(lp => lp.ProductID == productId && lp.ShopListID == shopListId)
                 .DeleteAsync();
+        }
+
+        public Task<List<Shop>> GetShopsAsync()
+        {
+            return _database.Table<Shop>().ToListAsync();
+        }
+        public Task<int> SaveShopAsync(Shop shop)
+        {
+            if (shop.ID != 0)
+            {
+                return _database.UpdateAsync(shop);
+            }
+            else
+            {
+                return _database.InsertAsync(shop);
+            }
+        }
+
+        public async Task<int> DeleteShopAsync(Shop shop)
+        {
+            return await _database.DeleteAsync(shop);
         }
     }
 }
